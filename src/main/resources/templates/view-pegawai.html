@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title th:replace="fragments/fragment :: headerFragment('Detail Pegawai')"></title>
+		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+	</head>
+	<body>
+		<nav th:replace="fragments/fragment :: navbar"></nav>
+		<div class="container-fluid">
+			<table>
+				<tr>
+					<td><h2>Lihat Data Pegawai - </h2></td>
+					<td><h2 th:text="${pegawai.nip}"></h2></td>
+				</tr>
+				<tr>
+					<td>NIP</td>
+					<td th:text="${pegawai.nip}"></td>
+				</tr>
+				<tr>
+					<td>Nama</td>
+					<td th:text="${pegawai.nama}"></td>
+				</tr>
+				<tr>
+					<td>Tempat Lahir</td>
+					<td th:text="${pegawai.tempat_lahir}"></td>
+				</tr>
+				<tr>
+					<td>Tanggal Lahir</td>
+					<td th:text="${pegawai.tanggal_lahir}"></td>
+				</tr>
+				<tr>
+					<td>Nama Instansi</td>
+					<td th:text="${pegawai.instansi.nama} + ' - ' + ${pegawai.instansi.provinsi.nama}"></td>
+				</tr>
+				<tr>
+					<td>Jabatan</td>	
+					<td>
+					<th:block th:each="jabatan : ${jabatanPegawai}">
+						<p th:text="${jabatan.jabatan.nama}"></p>		
+					</td>
+				</tr>
+	            <tr>
+					<td>Gaji</td>
+					<td th:text="'Rp ' + ${gaji}"></td>
+				</tr>
+			</table>
+			<form th:action="@{'/pegawai/ubah'}" method="GET">
+				<input type="hidden" th:value="${pegawai.nip}" name="nip" />
+				<button type="submit" class="btn btn-primary">Ubah</button>
+			</form>
+		</div>
+	</body>
+</html>

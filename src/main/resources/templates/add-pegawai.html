@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title th:replace="fragments/fragment :: headerFragment('Tambah Pegawai')"></title>
+		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+	</head>
+	<body>
+		<nav th:replace="fragments/fragment :: navbar"></nav>
+		
+		<div class="container-fluid">
+			<h2>Tambah Pegawai</h2>
+			<form th:action="@{/pegawai/tambah}" th:object=${pegawai} method="POST">
+				<table>
+					<tr>
+						<td>Nama</td>
+						<td><input type="text" name="nama" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tempat Lahir</td>
+						<td><input type="text" name="tempat_lahir" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tanggal Lahir</td>
+						<td><input type="date" name="tanggal_lahir" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tahun Masuk</td>
+						<td><input type="text" name="tahun_masuk" class="form-control"/></td>
+					</tr>
+					<tr>
+		                <td>Provinsi</td>
+		                <td>
+		                    <select th:field="*{id}">
+							<option th:each="provinsi : ${listProvinsi}" 
+							          th:value="${provinsi.id}" 
+							          th:text="${provinsi.nama}"></option>
+							</select>
+		                </td>
+		            </tr>
+		            <tr>
+		                <td>Nama Instansi</td>
+		                <td>
+		                    <select th:field="*{id}">
+							<option th:each="instansi : ${listInstansi}"
+							          th:value="${instansi.id}" 
+							          th:text="${instansi.nama}"></option>
+							</select>
+		                </td>
+		            </tr>
+		            <tr>
+		                <td><button type="submit" class="btn btn-primary">Tambah</button><td>
+		            </tr>
+				</table>
+			</form>
+		</div>
+	</body>
+</html>
