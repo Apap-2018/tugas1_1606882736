@@ -29,4 +29,10 @@ public class JabatanPegawaiServiceImpl implements JabatanPegawaiService{
 		// TODO Auto-generated method stub
 		return jabatanPegawaiDb.findAllByJabatan_Id(id);
 	}
+
+	@Override
+	public void addJabatanPegawai(JabatanPegawaiModel jabatanPegawai) {
+		// TODO Auto-generated method stub
+		jabatanPegawaiDb.save(jabatanPegawai);
+	}
 }

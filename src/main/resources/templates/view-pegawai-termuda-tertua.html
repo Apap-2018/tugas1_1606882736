@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title th:replace="fragments/fragment :: headerFragment('Detail Pegawai')"></title>
+		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+	</head>
+	<body>
+		<nav th:replace="fragments/fragment :: navbar"></nav>
+		<div class="container-fluid">
+			<table>
+				<tr>
+					<td><h2>Data Pegawai Termuda</h2></td>
+					<td></td>
+					<td> </td>
+					<td><h2>Data Pegawai Tertua</h2></td>
+				</tr>
+				<tr>
+					<td>NIP</td>
+					<td th:text="${termuda.nip}"></td>
+					<td> </td>
+					<td>NIP</td>
+					<td th:text="${tertua.nip}"></td>
+				</tr>
+				<tr>
+					<td>Nama</td>
+					<td th:text="${termuda.nama}"></td>
+					<td> </td>
+					<td>Nama</td>
+					<td th:text="${tertua.nama}"></td>
+				</tr>
+				<tr>
+					<td>Tempat Lahir</td>
+					<td th:text="${termuda.tempatlahir}"></td>
+					<td> </td>
+					<td>Tempat Lahir</td>
+					<td th:text="${tertua.tempatlahir}"></td>
+				</tr>
+				<tr>
+					<td>Tanggal Lahir</td>
+					<td th:text="${termuda.tanggallahir}"></td>
+					<td> </td>
+					<td>Tanggal Lahir</td>
+					<td th:text="${tertua.tanggallahir}"></td>
+				</tr>
+				<tr>
+					<td>Nama Instansi</td>
+					<td th:text="${termuda.instansi.nama} + ' - ' + ${termuda.instansi.provinsi.nama}"></td>
+					<td> </td>
+					<td>Nama Instansi</td>
+					<td th:text="${tertua.instansi.nama} + ' - ' + ${tertua.instansi.provinsi.nama}"></td>
+				</tr>
+				<tr>
+					<td>Jabatan</td>	
+					<td>
+					<th:block th:each="jabatan1 : ${jabatanmuda}">
+						<p th:text="${jabatan1.jabatan.nama}"></p>		
+					</td>
+					<td> </td>
+					<td>Jabatan</td>	
+					<td>
+					<th:block th:each="jabatan2 : ${jabatantua}">
+						<p th:text="${jabatan2.jabatan.nama}"></p>		
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

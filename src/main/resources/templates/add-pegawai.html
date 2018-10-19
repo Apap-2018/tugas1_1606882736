@@ -7,52 +7,98 @@
 	</head>
 	<body>
 		<nav th:replace="fragments/fragment :: navbar"></nav>
-		
-		<div class="container-fluid">
-			<h2>Tambah Pegawai</h2>
-			<form th:action="@{/pegawai/tambah}" th:object=${pegawai} method="POST">
-				<table>
-					<tr>
-						<td>Nama</td>
-						<td><input type="text" name="nama" class="form-control"/></td>
-					</tr>
-					<tr>
-						<td>Tempat Lahir</td>
-						<td><input type="text" name="tempat_lahir" class="form-control"/></td>
-					</tr>
-					<tr>
-						<td>Tanggal Lahir</td>
-						<td><input type="date" name="tanggal_lahir" class="form-control"/></td>
-					</tr>
-					<tr>
-						<td>Tahun Masuk</td>
-						<td><input type="text" name="tahun_masuk" class="form-control"/></td>
-					</tr>
-					<tr>
-		                <td>Provinsi</td>
-		                <td>
-		                    <select th:field="*{id}">
-							<option th:each="provinsi : ${listProvinsi}" 
-							          th:value="${provinsi.id}" 
-							          th:text="${provinsi.nama}"></option>
-							</select>
-		                </td>
-		            </tr>
-		            <tr>
-		                <td>Nama Instansi</td>
-		                <td>
-		                    <select th:field="*{id}">
-							<option th:each="instansi : ${listInstansi}"
-							          th:value="${instansi.id}" 
-							          th:text="${instansi.nama}"></option>
-							</select>
-		                </td>
-		            </tr>
-		            <tr>
-		                <td><button type="submit" class="btn btn-primary">Tambah</button><td>
-		            </tr>
-				</table>
+		<div class="container">
+			<div class="row">
+				<h2>Tambah Pegawai</h2>
+			</div>
+			<form th:action="@{/pegawai/tambah}" th:object="${pegawai}" method="POST">
+				<p>
+				<div class="row">
+					<div class="col-lg-4">Nama</div>
+					<div class="col-lg-4">
+						<input type="text" name="nama" >
+					</div>
+				</div>
+				</p>
+				<p>
+				<div class="row">
+					<div class="col-lg-4">Tempat Lahir</div>
+					<div class="col-lg-4">
+						<input type="text" name="tempatlahir">
+					</div>
+				</div>
+				</p>
+				<p>
+				<div class="row">
+					<div class="col-lg-4">Tanggal Lahir</div>
+					<div class="col-lg-4">
+						<input type="Date" name="tanggallahir" th:value="*{tanggallahir}">
+					</div>
+				</div>
+				</p>
+				<p>
+				<div class="row">
+					<div class="col-lg-4">Tahun Masuk</div>
+					<div class="col-lg-4">
+						<input type="number" name="tahunmasuk" step="1">
+					</div>
+				</div>
+				</p>
+				<p>
+				<div class="row">
+					<div class="col-lg-4">Provinsi</div>
+					<div class="col-lg-4">
+						<select id="provinsi" name="provinsi">
+						    <option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" th:text="${provinsi.nama}"/>
+						</select>
+					</div>
+				</div>
+				</p>
+				<p>
+				<div class="row">
+					<div class="col-lg-4">Nama Instansi</div>
+					<div class="col-lg-4">
+						<select name="instansi" th:value="*{instansi}" id="instansi">
+						    <option th:each="instansi: ${listInstansi}" th:value="${instansi.id}" th:text="${instansi.nama}"/>
+						</select>
+					</div>
+				</div>
+				</p>
+				<p>
+				<div class="row">
+					<div class="col-lg-4">Jabatan</div>
+					<div class="col-lg-8" th:each="jabatanPegawai, statusJabatan : *{listJabatanPegawai}" >
+						<select th:field="*{listJabatanPegawai[__${statusJabatan.index}__].jabatan}" class="col-lg-12">
+						    <option th:each="jabatan, status : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}"/>
+						</select>
+					</div>	
+				</div>
+				<br><button type="submit" class="btn btn-secondary" name="addJabatan">Tambah Jabatan Lainnya</button>
+				</p>
+				<button type="submit" class="btn btn-primary">Simpan</button>
 			</form>
 		</div>
+	<script type="text/javascript">
+	$(document).ready(function () {
+	    $("#provinsi").change(function () {
+	 
+	            $.getJSON("/instansi/tambah", {
+	                provinsiId : $(this).val(),
+	                ajax : 'true'
+	            }, function(data) {
+	                var html = '';
+	                var len = data.length;
+	                for ( var i = 0; i < len; i++) {
+	                    html += '<option value="' + data[i].id + '">'
+	                            + data[i].nama + '</option>';
+	                }
+	                html += '';
+	                console.log("berhasil");
+	                $('#instansi').html(html);
+	            });
+	    });    
+	        
+	});
+	</script>	
 	</body>
 </html>

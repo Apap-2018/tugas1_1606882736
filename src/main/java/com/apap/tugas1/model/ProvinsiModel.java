@@ -18,7 +18,6 @@ import javax.validation.constraints.Size;
 @Table(name = "provinsi")
 public class ProvinsiModel {
 	@Id
-	@NotNull
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	

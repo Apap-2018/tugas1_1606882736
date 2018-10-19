@@ -33,15 +33,18 @@ public class JabatanController {
 	@RequestMapping(value="/jabatan/tambah", method=RequestMethod.POST)
 	private String addJabatanSubmit(@ModelAttribute JabatanModel jabatan, Model model) {
 		jabatanService.addJabatan(jabatan);
-		model.addAttribute("jabatan", jabatan);
-		return "submit-add-jabatan";
+		model.addAttribute("status", "SUKSES!");
+		model.addAttribute("info", "Jabatan dengan ID "+ jabatan.getId() + " berhasil ditambahkan");
+		return "notifications";
 	}
 	
 	@RequestMapping(value="/jabatan/view", method=RequestMethod.GET)
 	private String viewJabatan(@RequestParam(name="jabatanId") String id, Model model) {
 		JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(id)).get();
+		List<JabatanPegawaiModel> listPegawai = jabatanPegawaiService.getPegawaiById(jabatan.getId());
 		double gaji =  jabatan.getGaji_pokok();
 		model.addAttribute("gaji", (long)gaji);
+		model.addAttribute("jumlah" , listPegawai.size());
 		model.addAttribute("jabatan", jabatan);
 		return "view-jabatan";
 	}
@@ -58,8 +61,9 @@ public class JabatanController {
 	@RequestMapping(value = "/jabatan/ubah", method = RequestMethod.POST)
 	private String updateJabatanSubmit(@ModelAttribute JabatanModel jabatan, String idJabatan, Model model) {
 		jabatanService.updateJabatan(jabatan , Long.parseLong(idJabatan));
-		model.addAttribute("jabatan" , Long.parseLong(idJabatan));
-		return "submit-update-jabatan";
+		model.addAttribute("status" , "SUKSES!");
+		model.addAttribute("info" , "Jabatan dengan ID " + idJabatan + " berhasil diubah");
+		return "notifications";
 	}
 	
 	@RequestMapping(value = "/jabatan/hapus", method = RequestMethod.POST)
@@ -77,8 +81,15 @@ public class JabatanController {
 			respon = "Jabatan tidak bisa dihapus";
 			status = "GAGAL!";
 		}
-		model.addAttribute("respon" , respon);
-		model.addAttribute("status", status);
-		return "delete-jabatan";
+		model.addAttribute("status" , status);
+		model.addAttribute("info", respon);
+		return "notifications";
+	}
+	
+	@RequestMapping(value = "/jabatan/viewall")
+	private String viewAllJabatan(Model model) {
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		model.addAttribute("jabatan" , listJabatan);
+		return "viewall-jabatan";
 	}
 }

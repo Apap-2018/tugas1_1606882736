@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "instansi")
 public class InstansiModel implements Serializable {
 	@Id
-	@NotNull
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	

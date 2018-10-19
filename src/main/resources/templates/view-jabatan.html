@@ -25,6 +25,10 @@
 					<td>Gaji Pokok</td>
 					<td th:text="${gaji}"></td>
 				</tr>
+				<tr>
+					<td>Jumlah Pegawai</td>
+					<td th:text="${jumlah}"></td>
+				</tr>
 			</table>
 			<form th:action="@{'/jabatan/ubah'}" method="GET">
 				<input type="hidden" th:value="${jabatan.id}" name="idJabatan" />

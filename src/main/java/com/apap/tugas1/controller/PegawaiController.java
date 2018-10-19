@@ -1,5 +1,6 @@
 package com.apap.tugas1.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,9 @@ public class PegawaiController {
 	@RequestMapping("/")
 	private String home(Model model){
 		List<JabatanModel> listJabatan = jabatanService.getAll();
-		model.addAttribute("listjabatan", listJabatan);
+		List<InstansiModel> listInstansi = instansiService.getAllInstansi();
+		model.addAttribute("listinstansi" , listInstansi);
+		model.addAttribute("listjabatan" , listJabatan);
 		return "home";
 	}
 	
@@ -73,7 +76,7 @@ public class PegawaiController {
 			model.addAttribute("listInstansi", listInstansi);
 			return "update-pegawai";
 		}
-		return "not-found";
+		return "notify";
 		
 	}
 	
@@ -83,25 +86,88 @@ public class PegawaiController {
 		return "update";
 	}
 	
-	@RequestMapping("/pegawai/tambah")
+	@RequestMapping(value = "/pegawai/tambah", method = RequestMethod.GET)
 	private String addPegawai(Model model) {
 		PegawaiModel pegawai = new PegawaiModel();
 		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
-		List<InstansiModel> listInstansi = instansiService.getAllInstansi();
-		model.addAttribute("pegawai", pegawai);
+		List<JabatanPegawaiModel> listJabatanPegawai = new ArrayList<JabatanPegawaiModel>();
+		pegawai.setListJabatanPegawai(listJabatanPegawai);
+		
+		JabatanPegawaiModel jabatanPegawai = new JabatanPegawaiModel();
+		jabatanPegawai.setPegawai(pegawai);
+		pegawai.getListJabatanPegawai().add(jabatanPegawai);
+		List<InstansiModel> listInstansi = listProvinsi.get(0).getListInstansi();
+		
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		
 		model.addAttribute("listProvinsi", listProvinsi);
 		model.addAttribute("listInstansi", listInstansi);
+		model.addAttribute("listJabatan", listJabatan);
+		model.addAttribute("title", "Tambah Pegawai");
+		model.addAttribute("pegawai", pegawai);
 		return "add-pegawai";
 		
 	}
 	
+	@RequestMapping(value = "/pegawai/tambah", method = RequestMethod.POST, params= {"addJabatan"})
+	public String tambahJabatan(@ModelAttribute PegawaiModel pegawai_new, Model model) {
+		PegawaiModel pegawai = pegawai_new;
+		
+		JabatanPegawaiModel jabatanPegawai = new JabatanPegawaiModel();
+		jabatanPegawai.setPegawai(pegawai);
+		pegawai.getListJabatanPegawai().add(jabatanPegawai);
+		
+		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
+		
+		List<InstansiModel> listInstansi = new ArrayList<InstansiModel>();
+		listInstansi = listProvinsi.get(0).getListInstansi();
+	
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		
+		model.addAttribute("title", "Tambah Pegawai");
+		model.addAttribute("listProvinsi", listProvinsi);
+		model.addAttribute("listInstansi", listInstansi);
+		model.addAttribute("listJabatan", listJabatan);
+		model.addAttribute("pegawai", pegawai);
+		return "add-pegawai";
+	}
+	
 	@RequestMapping(value="/pegawai/tambah", method=RequestMethod.POST)
 	private String addPegawaiSubmit(@ModelAttribute PegawaiModel pegawai, Model model) {
-		pegawai.setNip("");
-		pegawaiService.addPegawai(pegawai);
-		model.addAttribute("pegawai", pegawai);
-		return "submit-add-pegawai";
+
+		String nip = pegawaiService.makeNip(pegawai);
+		pegawai.setNip(nip);
 		
+		List<JabatanPegawaiModel> listJabatan = pegawai.getListJabatanPegawai();
+		
+		pegawai.setListJabatanPegawai(new ArrayList<JabatanPegawaiModel>());
+		
+		pegawaiService.addPegawai(pegawai);
+		
+		for (int i = 0; i < listJabatan.size(); i++) {
+			listJabatan.get(i).setPegawai(pegawai);
+			jabatanPegawaiService.addJabatanPegawai(listJabatan.get(i));
+		}
+		
+		model.addAttribute("status", "SUKSES!");
+		model.addAttribute("info", "Pegawai dengan NIP "+ nip +" berhasil ditambahkan");
+		return "notifications";
+		
+	}
+	
+	@RequestMapping(value = "/pegawai/termuda-tertua")
+	private String viewPegawaiMudaTua(@RequestParam(value = "idInstansi") String id, Model model) {
+		InstansiModel instansi = instansiService.getIntansiById(Long.parseLong(id)).get();
+		List<PegawaiModel> listPegawaiInstansi = pegawaiService.getPegawaiByInstansi(instansi);
+		PegawaiModel termuda = listPegawaiInstansi.get(listPegawaiInstansi.size()-1);
+		PegawaiModel tertua = listPegawaiInstansi.get(0);
+		List<JabatanPegawaiModel> jabatanPegawaiMuda = jabatanPegawaiService.getJabatanByNip(termuda.getNip()).get();
+		List<JabatanPegawaiModel> jabatanPegawaiTua = jabatanPegawaiService.getJabatanByNip(tertua.getNip()).get();
+		model.addAttribute("jabatanmuda", jabatanPegawaiMuda);
+		model.addAttribute("jabatantua", jabatanPegawaiTua);
+		model.addAttribute("termuda" , termuda);
+		model.addAttribute("tertua" , tertua);
+		return "view-pegawai-termuda-tertua";
 	}
 	
 }

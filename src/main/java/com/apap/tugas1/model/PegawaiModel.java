@@ -2,7 +2,9 @@ package com.apap.tugas1.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "pegawai")
 public class PegawaiModel implements Serializable {
 	@Id
-	@NotNull
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
@@ -41,16 +43,16 @@ public class PegawaiModel implements Serializable {
 	@NotNull
 	@Size(max = 255)
 	@Column(name = "tempat_lahir", nullable = false)
-	private String tempat_lahir;
+	private String tempatlahir;
 	
 	@NotNull
 	@Column(name = "tanggal_lahir", nullable = false)
-	private Date tanggal_lahir;
+	private Date tanggallahir;
 	
 	@NotNull
 	@Size(max = 255)
 	@Column(name = "tahun_masuk", nullable = false)
-	private String tahun_masuk;
+	private String tahunmasuk;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_instansi", referencedColumnName = "id", nullable = false)
@@ -58,7 +60,9 @@ public class PegawaiModel implements Serializable {
 	@JsonIgnore
 	private InstansiModel instansi;
 	
-
+	@OneToMany(mappedBy = "pegawai", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	private List<JabatanPegawaiModel> listJabatanPegawai;
+	
 	public Long getId() {
 		return id;
 	}
@@ -83,20 +87,20 @@ public class PegawaiModel implements Serializable {
 		this.nama = nama;
 	}
 
-	public String getTempat_lahir() {
-		return tempat_lahir;
+	public String getTempatlahir() {
+		return tempatlahir;
 	}
 
-	public void setTempat_lahir(String tempat_lahir) {
-		this.tempat_lahir = tempat_lahir;
+	public void setTempatlahir(String tempatlahir) {
+		this.tempatlahir = tempatlahir;
 	}
 
-	public String getTahun_masuk() {
-		return tahun_masuk;
+	public String getTahunmasuk() {
+		return tahunmasuk;
 	}
 
-	public void setTahun_masuk(String tahun_masuk) {
-		this.tahun_masuk = tahun_masuk;
+	public void setTahunmasuk(String tahunmasuk) {
+		this.tahunmasuk = tahunmasuk;
 	}
 
 	public InstansiModel getInstansi() {
@@ -107,12 +111,20 @@ public class PegawaiModel implements Serializable {
 		this.instansi = instansi;
 	}
 
-	public Date getTanggal_lahir() {
-		return tanggal_lahir;
+	public Date getTanggallahir() {
+		return tanggallahir;
 	}
 
-	public void setTanggal_lahir(Date tanggal_lahir) {
-		this.tanggal_lahir = tanggal_lahir;
+	public void setTanggallahir(Date tanggallahir) {
+		this.tanggallahir = tanggallahir;
+	}
+
+	public List<JabatanPegawaiModel> getListJabatanPegawai() {
+		return listJabatanPegawai;
+	}
+
+	public void setListJabatanPegawai(List<JabatanPegawaiModel> listJabatanPegawai) {
+		this.listJabatanPegawai = listJabatanPegawai;
 	}
 	
 }
