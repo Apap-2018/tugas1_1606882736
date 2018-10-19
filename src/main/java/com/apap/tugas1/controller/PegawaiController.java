@@ -65,19 +65,50 @@ public class PegawaiController {
 		return "view-pegawai";
 	}
 	
-	@RequestMapping(value="/pegawai/ubah")
-	private String updatePegawai(@RequestParam(value="nip") String nip, Model model) {
-		PegawaiModel pegawai = pegawaiService.getPegawaiByNIP(Long.parseLong(nip)).get();
-		if (pegawai != null) {
-			List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
-			List<InstansiModel> listInstansi = instansiService.getAllInstansi();
-			model.addAttribute("pegawai", pegawai);
-			model.addAttribute("listProvinsi", listProvinsi);
-			model.addAttribute("listInstansi", listInstansi);
-			return "update-pegawai";
-		}
-		return "notify";
+	@RequestMapping(value="/pegawai/ubah", method = RequestMethod.GET)
+	private String updatePegawai(@RequestParam(name = "nip")String nip, Model model) {
+		PegawaiModel pegawai = new PegawaiModel();
+		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
+		List<JabatanPegawaiModel> listJabatanPegawai = new ArrayList<JabatanPegawaiModel>();
+		pegawai.setListJabatanPegawai(listJabatanPegawai);
 		
+		JabatanPegawaiModel jabatanPegawai = new JabatanPegawaiModel();
+		jabatanPegawai.setPegawai(pegawai);
+		pegawai.getListJabatanPegawai().add(jabatanPegawai);
+		List<InstansiModel> listInstansi = listProvinsi.get(0).getListInstansi();
+		
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		
+		model.addAttribute("listProvinsi", listProvinsi);
+		model.addAttribute("listInstansi", listInstansi);
+		model.addAttribute("listJabatan", listJabatan);
+		model.addAttribute("title", "Tambah Pegawai");
+		model.addAttribute("pegawai", pegawai);
+		return "update-pegawai";
+		
+	}
+	
+	@RequestMapping(value = "/pegawai/ubah", method = RequestMethod.POST, params= {"addJabatan"})
+	public String rowJabatan(@ModelAttribute PegawaiModel pegawai_new, Model model) {
+		PegawaiModel pegawai = pegawai_new;
+		
+		JabatanPegawaiModel jabatanPegawai = new JabatanPegawaiModel();
+		jabatanPegawai.setPegawai(pegawai);
+		pegawai.getListJabatanPegawai().add(jabatanPegawai);
+		
+		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
+		
+		List<InstansiModel> listInstansi = new ArrayList<InstansiModel>();
+		listInstansi = listProvinsi.get(0).getListInstansi();
+	
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		
+		model.addAttribute("title", "Tambah Pegawai");
+		model.addAttribute("listProvinsi", listProvinsi);
+		model.addAttribute("listInstansi", listInstansi);
+		model.addAttribute("listJabatan", listJabatan);
+		model.addAttribute("pegawai", pegawai);
+		return "update-pegawai";
 	}
 	
 	@RequestMapping(value="/pegawai/ubah", method=RequestMethod.POST)

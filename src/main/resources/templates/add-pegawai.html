@@ -16,7 +16,7 @@
 				<div class="row">
 					<div class="col-lg-4">Nama</div>
 					<div class="col-lg-4">
-						<input type="text" name="nama" >
+						<input type="text" name="nama" th:value="*{nama}">
 					</div>
 				</div>
 				</p>
@@ -24,7 +24,7 @@
 				<div class="row">
 					<div class="col-lg-4">Tempat Lahir</div>
 					<div class="col-lg-4">
-						<input type="text" name="tempatlahir">
+						<input type="text" name="tempatlahir" th:value="*{tempatlahir}">
 					</div>
 				</div>
 				</p>
@@ -40,7 +40,7 @@
 				<div class="row">
 					<div class="col-lg-4">Tahun Masuk</div>
 					<div class="col-lg-4">
-						<input type="number" name="tahunmasuk" step="1">
+						<input type="number" name="tahunmasuk" th:value="*{tahunmasuk}" step="1">
 					</div>
 				</div>
 				</p>
