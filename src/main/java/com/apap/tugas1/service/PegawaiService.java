@@ -7,11 +7,13 @@ import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.PegawaiModel;
 
 public interface PegawaiService {
-	Optional<PegawaiModel> getPegawaiByNIP(Long NIP);
+	Optional<PegawaiModel> getPegawaiByNIP(String NIP);
 	
 	void addPegawai(PegawaiModel Pegawai);
 	
 	List<PegawaiModel> getPegawaiByInstansi(InstansiModel Instansi);
 	
 	String makeNip(PegawaiModel pegawai);
+	
+	void update(PegawaiModel pegawaiUpdate, PegawaiModel pegawaiBefore);
 }
