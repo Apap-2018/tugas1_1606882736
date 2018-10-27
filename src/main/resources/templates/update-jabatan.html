@@ -7,6 +7,14 @@
 	</head>
 	<body>
 		<nav th:replace="fragments/fragment :: navbar"></nav>
+		<div th:switch="${message}">
+		    <div th:case="'Success'" class="alert alert-success">
+		        <strong>Success!</strong>
+		        <h2>Jabatan berhasil diubah</h2>
+		    </div>
+		    <div th:case="'Failed'" class="alert alert-danger"> 
+		    </div>
+		</div>
 		<div class="container-fluid">
 			<form th:action="@{'/jabatan/ubah'}" th:object="${jabatan}" method="POST">
 				<table>

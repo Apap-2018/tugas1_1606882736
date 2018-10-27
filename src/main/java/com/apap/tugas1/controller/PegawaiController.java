@@ -85,7 +85,7 @@ public class PegawaiController {
 	
 	@RequestMapping(value = "/pegawai/ubah", method = RequestMethod.POST, params= {"addJabatan"})
 	public String rowJabatan(@ModelAttribute PegawaiModel pegawai_new, Model model) {
-PegawaiModel pegawai = pegawai_new;
+		PegawaiModel pegawai = pegawai_new;
 		
 		JabatanPegawaiModel jabatanPegawai = new JabatanPegawaiModel();
 		jabatanPegawai.setPegawai(pegawai);
@@ -95,8 +95,6 @@ PegawaiModel pegawai = pegawai_new;
 		
 		List<InstansiModel> listInstansi = new ArrayList<InstansiModel>();
 		listInstansi = listProvinsi.get(0).getListInstansi();
-
-		System.out.println("make nip: " + pegawaiService.makeNip(pegawai));
 		
 		List<JabatanModel> listJabatan = jabatanService.getAll();
 		
@@ -115,9 +113,9 @@ PegawaiModel pegawai = pegawai_new;
 		String nip = pegawaiService.makeNip(pegawai);
 		pegawai.setNip(nip);
 		pegawaiService.update(pegawai, pegawaiBefore);
-		model.addAttribute("title", "Sukses");
-		model.addAttribute("nipPegawai", nip);
-		return "update";
+		model.addAttribute("status", "SUKSES!");
+		model.addAttribute("info", "Pegawai dengan NIP " + nip + " berhasil diubah");
+		return "notifications";
 	}
 	
 	@RequestMapping(value = "/pegawai/tambah", method = RequestMethod.GET)

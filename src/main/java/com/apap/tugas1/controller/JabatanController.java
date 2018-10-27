@@ -26,6 +26,7 @@ public class JabatanController {
 	@RequestMapping("/jabatan/tambah")
 	private String addJabatan(Model model) {
 		JabatanModel jabatan = new JabatanModel();
+		model.addAttribute("message", "No");
 		model.addAttribute("jabatan", jabatan);
 		return "add-jabatan";
 	}
@@ -33,9 +34,9 @@ public class JabatanController {
 	@RequestMapping(value="/jabatan/tambah", method=RequestMethod.POST)
 	private String addJabatanSubmit(@ModelAttribute JabatanModel jabatan, Model model) {
 		jabatanService.addJabatan(jabatan);
-		model.addAttribute("status", "SUKSES!");
-		model.addAttribute("info", "Jabatan dengan ID "+ jabatan.getId() + " berhasil ditambahkan");
-		return "notifications";
+		model.addAttribute("jabatan", jabatan);
+		model.addAttribute("message", "Success");
+		return "add-jabatan";
 	}
 	
 	@RequestMapping(value="/jabatan/view", method=RequestMethod.GET)
@@ -53,6 +54,7 @@ public class JabatanController {
 	private String updateJabatan(@RequestParam(name="idJabatan") String id, Model model) {
 		JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(id)).get();
 		double gaji =  jabatan.getGaji_pokok();
+		model.addAttribute("message", "No");
 		model.addAttribute("gaji", gaji);
 		model.addAttribute("jabatan" , jabatan);
 		return "update-jabatan";
@@ -61,9 +63,12 @@ public class JabatanController {
 	@RequestMapping(value = "/jabatan/ubah", method = RequestMethod.POST)
 	private String updateJabatanSubmit(@ModelAttribute JabatanModel jabatan, String idJabatan, Model model) {
 		jabatanService.updateJabatan(jabatan , Long.parseLong(idJabatan));
-		model.addAttribute("status" , "SUKSES!");
-		model.addAttribute("info" , "Jabatan dengan ID " + idJabatan + " berhasil diubah");
-		return "notifications";
+		JabatanModel jabatan1 = jabatanService.getJabatanById(Long.parseLong(idJabatan)).get();
+		double gaji =  jabatan.getGaji_pokok();
+		model.addAttribute("gaji", gaji);
+		model.addAttribute("jabatan" , jabatan1);
+		model.addAttribute("message", "Success");
+		return "update-jabatan";
 	}
 	
 	@RequestMapping(value = "/jabatan/hapus", method = RequestMethod.POST)
