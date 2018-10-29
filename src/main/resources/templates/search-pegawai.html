@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title th:replace="fragments/fragment :: headerFragment('Cari Pegawai')"></title>
+		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+	</head>
+	<body>
+		<nav th:replace="fragments/fragment :: navbar"></nav>
+		<div class="container">
+			<form th:action="@{/pegawai/cari}" method="GET">
+				<p>
+				<div class="row">
+					<label class="col-lg-4" for="IdProvinsi">Nama Provinsi</label>
+					<div class="col-lg-8">
+						<select class="form-control" id="provinsi" name="IdProvinsi">
+							<option disabled="disabled" selected="selected" >Pilih Provinsi</option>
+						    <option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" th:text="${provinsi.nama}"/>
+						</select>
+					</div>
+				</div>
+				</p>
+				<p>
+				<div class="row">
+					<label class="col-lg-4" for="idInstansi">Nama Instansi</label>
+					<div class="col-lg-8">
+						<select class="form-control" name="IdInstansi" id="instansi">
+						   <option disabled="disabled" selected="selected" >Pilih Instansi</option>
+						   <option th:each="instansi, status : ${listInstansi}" th:value="${instansi.id}" th:text="${instansi.nama}"/>
+						</select>
+					</div>
+				</div>
+				</p>
+				<p>
+				<div class="row">
+					<label class="col-lg-4" for="IdJabatan">Nama Jabatan</label>
+					<div class="col-lg-8" >
+						<select name="IdJabatan" class="form-control">
+							<option disabled="disabled" selected="selected" >Pilih Jabatan</option>
+						    <option th:each="jabatan, status : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}"/>
+						</select>
+					</div>	
+				</div>
+				</p>
+				<button class="btn btn-dark" type="submit" name="search">Search</button>
+			</form>
+		<hr class="style5">
+		<table id="table_id" class="display">
+			<thead>
+				<tr>
+					<th>NIP</th>
+					<th>Nama</th>
+					<th>Tempat Lahir</th>
+					<th>Tanggal Lahir</th>
+					<th>Tahun Masuk</th>
+					<th>Nama Instansi</th>
+					<th>Jabatan</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pegawai : *{listPegawai}">
+					<td th:text="${pegawai.nip}"></td>
+					<td th:text="${pegawai.nama}"></td>
+					<td th:text="${pegawai.tempatlahir}"></td>
+					<td th:text="${pegawai.tanggallahir}"></td>
+					<td th:text="${pegawai.tahunmasuk}"></td>
+					<td th:text="${pegawai.instansi.nama}"></td>
+					<td>
+						<ol>
+							<li th:each="jabatan: ${pegawai.listJabatanPegawai}" th:text="${jabatan.jabatan.nama}"></li>
+						</ol>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		<script>
+			$(document).ready( function () {
+				$("#cariPegawai").addClass("active");
+			    $('#table_id').DataTable();
+			} );
+			
+			$('#provinsi').change(
+			     function() {
+			         $.getJSON("/instansi/tambah", {
+			             provinsiId : $(this).val(),
+			             ajax : 'true'
+			         }, function(data) {
+			             var html = '<option value="">Pilih Instansi</option>';
+			             var len = data.length;
+			             for ( var i = 0; i < len; i++) {
+			                 html += '<option value="' + data[i].id + '">'
+			                         + data[i].nama + '</option>';
+			             }
+			             html += '</option>';
+			             $('#instansi').html(html);
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -8,11 +8,12 @@
 	<body>
 		<nav th:replace="fragments/fragment :: navbar"></nav>
 		<div th:switch="${message}">
-		    <div th:case="'Success'" class="alert alert-success">
-		        <strong>Success!</strong>
-		        <h2>Jabatan berhasil ditambahkan</h2>
-		    </div>
-		    <div th:case="'Failed'" class="alert alert-danger"> 
+		    <div th:case="'Success'">
+		    	<div class="alert">
+			    	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+			        <strong>Success!</strong>
+			        <strong>Jabatan berhasil ditambahkan</strong>
+		        </div>
 		    </div>
 		</div>
 		<div class="container-fluid">

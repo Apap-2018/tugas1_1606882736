@@ -10,4 +10,6 @@ public interface InstansiService {
 
 	List<InstansiModel> getAllInstansi();
 
+	InstansiModel findById(Long id);
+
 }

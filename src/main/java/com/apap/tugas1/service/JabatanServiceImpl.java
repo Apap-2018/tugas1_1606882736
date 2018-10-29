@@ -46,4 +46,16 @@ public class JabatanServiceImpl implements JabatanService{
 		JabatanDb.save(jabatan1);
 	}
 
+	@Override
+	public JabatanModel findById(Long id) {
+		// TODO Auto-generated method stub
+		return JabatanDb.findById(id).get();
+	}
+
+	@Override
+	public List<JabatanModel> findAll() {
+		// TODO Auto-generated method stub
+		return JabatanDb.findAll();
+	}
+
 }

@@ -9,4 +9,8 @@ public interface ProvinsiService {
 	Optional<ProvinsiModel> getProvinsiById(Long id);
 
 	List<ProvinsiModel> getAllProvinsi();
+
+	ProvinsiModel findById(Long id);
+
+	List<ProvinsiModel> findAll();
 }
